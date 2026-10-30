@@ -9,8 +9,7 @@ export default function Login() {
 
   const authUrl = namespace ? `/api/namespace/${namespace}/saml/auth` : '/api/saml/auth';
   const [state, setState] = useState({
-    username: 'jackson',
-    domain: 'example.com',
+    email: 'user1@example.com',
     acsUrl: 'https://sso.eu.boxyhq.com/api/oauth/saml',
     audience: 'https://saml.boxyhq.com',
   });
@@ -36,13 +35,11 @@ export default function Login() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { username, domain } = state;
-
     const response = await fetch(authUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: `${username}@${domain}`,
+        email: `${state.email}`,
         id,
         audience: audience || state.audience,
         acsUrl: acsUrl || state.acsUrl,
@@ -116,30 +113,16 @@ export default function Login() {
                   <label className='block mb-1 text-sm font-medium text-gray-700'>Email</label>
                   <input
                     ref={emailInp}
-                    name='username'
-                    id='username'
+                    name='email'
+                    id='email'
                     type='text'
                     autoComplete='off'
-                    value={state.username}
+                    value={state.email}
                     onChange={handleChange}
-                    placeholder='jackson'
+                    placeholder='user1@example.com'
                     className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/30'
                   />
                 </div>
-
-                <div>
-                  <label className='block mb-1 text-sm font-medium text-gray-700'>Domain</label>
-                  <select
-                    name='domain'
-                    id='domain'
-                    value={state.domain}
-                    onChange={handleChange}
-                    className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/30'>
-                    <option value='example.com'>@example.com</option>
-                    <option value='example.org'>@example.org</option>
-                  </select>
-                </div>
-
                 <div className='col-span-2'>
                   <label className='block mb-1 text-sm font-medium text-gray-700'>Password</label>
                   <input
@@ -164,9 +147,7 @@ export default function Login() {
           {/* Info box */}
           <div className='rounded-md border border-blue-200 bg-blue-50 p-4'>
             <p className='text-sm text-blue-900'>
-              This is a simulated login screen. You may choose any username, but only the domains{' '}
-              <code className='font-mono'>example.com</code> and{' '}
-              <code className='font-mono'>example.org</code> are allowed.
+              This is a simulated login screen, feel free to pick any email.
             </p>
           </div>
         </div>
